@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "666194209280",
+    "firebase_url": "https://airmusic-d5de3.firebaseio.com",
+    "project_id": "airmusic-d5de3",
+    "storage_bucket": "airmusic-d5de3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666194209280:android:b15fc1fafacecfd78e06e5",
+        "android_client_info": {
+          "package_name": "com.example.mure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666194209280-d6611rhficri607bo709q705q9iq66g1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCorTviSe2joU3QNw3ymcImzDdNiyZjdi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666194209280-d6611rhficri607bo709q705q9iq66g1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
