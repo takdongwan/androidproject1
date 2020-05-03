@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity  extends AppCompatActivity {
 
-    private static final String TAG = "SignUpActivity ";
     private FirebaseAuth mAuth;
 
     @Override
@@ -41,6 +40,14 @@ public class SignUpActivity  extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
     }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+        moveTaskToBack(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
+    }
+
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
