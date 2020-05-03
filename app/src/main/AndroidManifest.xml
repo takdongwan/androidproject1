@@ -28,16 +28,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity">
-
         </activity>
         <activity android:name=".SignUpActivity">
-
         </activity>
         <activity android:name=".PasswordResetActivity">
-
         </activity>
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>
