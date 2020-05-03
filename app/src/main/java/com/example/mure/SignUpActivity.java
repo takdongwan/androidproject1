@@ -1,5 +1,6 @@
 package com.example.mure;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,7 @@ public class SignUpActivity  extends AppCompatActivity {
 
         //버튼누를 때 예외처리리
         findViewById(R.id.signUpButton).setOnClickListener(onClickListener);
+        findViewById(R.id.gotoLoginButton).setOnClickListener(onClickListener);
     }
 
 
@@ -43,13 +45,14 @@ public class SignUpActivity  extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
+            switch (v.getId()) {   //클릭 됐을시 실행
                 case R.id.signUpButton:
-                    Log.e("z클릭", "클릭");
-
-                    //클릭 됐을시 실행
                     signUp();
                     break;
+                case R.id.gotoLoginButton:
+                    startLoginActivty();
+
+
             }
         }
     };
@@ -81,7 +84,7 @@ public class SignUpActivity  extends AppCompatActivity {
                             }
                         });
             } else {
-                //비밀번호가 틀렸을경우 toast 창s
+//                비밀번호가 틀렸을경우 toast 창s
                 startToast("비밀번호가 일치하지 않습니다.");
             }
         }else{
@@ -93,4 +96,11 @@ public class SignUpActivity  extends AppCompatActivity {
     private void startToast(String msg){
         Toast.makeText(this,msg, Toast.LENGTH_SHORT).show();
     }
+    private void startLoginActivty(){
+//        gotoLoginButton 버튼을 눌렀을시
+        Intent intent=new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
 }
+
