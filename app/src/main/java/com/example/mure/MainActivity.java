@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,15 +22,9 @@ public class MainActivity extends AppCompatActivity {
         if (user == null) {
             myStartActivity(SignUpActivity.class);
         }else{
-                for(UserInfo profile : user.getProviderData()){
-                    String name = profile.getDisplayName();
-                    if(name == null){
-                        myStartActivity(MemberInitActivity.class);
-                    }
-                }
-
+            //회원정보를 입력하라는 activity 가  나와야함.
+            myStartActivity(MemberInitActivity.class);
         }
-
         findViewById(R.id.logoutButton).setOnClickListener(onClickListener);
     }
 
