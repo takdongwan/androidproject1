@@ -2,13 +2,13 @@ package com.example.mure;
 
 import android.widget.EditText;
 
-public class MemberInfo {
+public class MemberInfoActivity {
     private  String name;
     private  String phoneNumber;
     private  String birtyDay;
     private  String address;
 
-    public MemberInfo(String name, String phoneNumber, String birtyDay, String address){
+    public MemberInfoActivity(String name, String phoneNumber, String birtyDay, String address){
         this.name=name;
         this.phoneNumber=phoneNumber;
         this.birtyDay=birtyDay;
