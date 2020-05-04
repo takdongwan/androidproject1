@@ -34,6 +34,9 @@
         <activity android:name=".PasswordResetActivity">
         </activity>
 
+        <activity android:name=".MemberInitActivity">
+        </activity>
+
     </application>
 
 </manifest>

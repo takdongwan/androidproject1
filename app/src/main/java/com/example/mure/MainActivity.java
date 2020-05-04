@@ -3,10 +3,13 @@ package com.example.mure;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,11 +17,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            myStartActivity(SignUpActivity.class);
+        }else{
+                for(UserInfo profile : user.getProviderData()){
+                    String name = profile.getDisplayName();
+                    if(name == null){
+                        myStartActivity(MemberInitActivity.class);
+                    }
+                }
 
-        //현재로그인 여부
-        // Initialize Firebase Auth
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            startSignUpActivity();
         }
 
         findViewById(R.id.logoutButton).setOnClickListener(onClickListener);
@@ -30,15 +39,16 @@ public class MainActivity extends AppCompatActivity {
                 switch (v.getId()){
                     case R.id.logoutButton:
                         FirebaseAuth.getInstance().signOut();
-                        startSignUpActivity();//로그아웃 되면서 signupActivity 로 돌아가기 위함.
+                        myStartActivity(SignUpActivity.class);
                         break;
                 }
 
             }
         };
-    private void startSignUpActivity(){
-//        gotoLoginButton 버튼을 눌렀을시
-        Intent intent=new Intent(this, SignUpActivity.class);
+
+    private void myStartActivity(Class c){
+        Intent intent=new Intent(this, c);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
