@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         if (user == null) {
             myStartActivity(SignUpActivity.class);
         }else{
-            myStartActivity(CameraActivity.class);
+            myStartActivity(SignUpActivity.class);//200506 확인작업 임시로 여기서 키움
             //회원정보를 입력하라는 activity 가  나와야함.
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection("users").document(user.getUid());
