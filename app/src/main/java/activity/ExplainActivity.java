@@ -1,8 +1,10 @@
-package com.example.mure;
+package activity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.mure.R;
 
 public class ExplainActivity extends AppCompatActivity {
 

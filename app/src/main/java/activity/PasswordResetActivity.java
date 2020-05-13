@@ -1,4 +1,4 @@
-package com.example.mure;
+package activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mure.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -63,7 +64,7 @@ public class PasswordResetActivity extends AppCompatActivity {
             });
             } else {
                 //이메일이나 비밀번호가 틀렸을경우 toast 창s
-            startToast("이메일입력햊쉐요");
+            startToast("이메일입력해주세요");
             }
     }
 

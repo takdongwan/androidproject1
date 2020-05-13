@@ -1,8 +1,7 @@
-package com.example.mure;
+package activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,11 +9,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mure.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import activity.LoginActivity;
+import activity.MainActivity;
 
 public class SignUpActivity  extends AppCompatActivity {
 
@@ -47,7 +50,6 @@ public class SignUpActivity  extends AppCompatActivity {
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
     }
-
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
