@@ -1,25 +1,25 @@
-package com.example.mure;
+package activity;
 
 import android.widget.EditText;
 
 public class MemberInfoActivity {
     private  String name;
     private  String phoneNumber;
-    private  String birtyDay;
+    private  String birthDay;
     private  String address;
     private  String photoUrl;
 
-    public MemberInfoActivity(String name, String phoneNumber, String birtyDay, String address,String photoUrl){
+    public MemberInfoActivity(String name, String phoneNumber, String birthDay, String address,String photoUrl){
         this.name=name;
         this.phoneNumber=phoneNumber;
-        this.birtyDay=birtyDay;
+        this.birthDay=birthDay;
         this.address=address;
         this.photoUrl=photoUrl;
     }
-    public MemberInfoActivity(String name, String phoneNumber, String birtyDay, String address){
+    public MemberInfoActivity(String name, String phoneNumber, String birthDay, String address){
         this.name=name;
         this.phoneNumber=phoneNumber;
-        this.birtyDay=birtyDay;
+        this.birthDay=birthDay;
         this.address=address;
 
     }
@@ -31,24 +31,24 @@ public class MemberInfoActivity {
         this.name= name;
     }
     //
-    public String getphoneNumber(){
+    public String getPhoneNumber(){
         return this.phoneNumber;
     }
-    public void setphoneNumber(String phoneNumber){
+    public void setPhoneNumber(String phoneNumber){
         this.phoneNumber= phoneNumber;
     }
     //
-    public String getbirtyDay(){
-        return this.birtyDay;
+    public String getBirthDay(){
+        return this.birthDay;
     }
-    public void setbirtyDay(String birtyDay){
-        this.birtyDay= birtyDay;
+    public void setBirthDay(String birthDay){
+        this.birthDay= birthDay;
     }
     //
-    public String getaddress(){
+    public String getAddress(){
         return this.address;
     }
-    public void setaddress(String address){
+    public void setAddress(String address){
         this.address= address;
     }
 

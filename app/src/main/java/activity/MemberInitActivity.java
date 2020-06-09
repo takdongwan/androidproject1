@@ -4,23 +4,21 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.mure.MemberInfoActivity;
+import com.bumptech.glide.Glide;
 import com.example.mure.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,33 +36,36 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
-import activity.CameraActivity;
-
-public class MemberInitActivity extends AppCompatActivity {
-
+public class MemberInitActivity extends BasicActivity {
     private static final String TAG = "MemberInitActivity";
-    private ImageView profileImageView;
+    private ImageView profileImageVIew;
+    private RelativeLayout loaderLayout;
+    private RelativeLayout buttonBackgroundLayout;
     private String profilePath;
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_init);
-        profileImageView = findViewById(R.id.profileImageView);
-        profileImageView.setOnClickListener(onClickListener);
-        //버튼에 리스너
+        setContentView(R.layout.activity_user_init);
+        setToolbarTitle("회원정보");
+
+        loaderLayout = findViewById(R.id.loaderLyaout);
+        profileImageVIew = findViewById(R.id.profileImageView);
+        buttonBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
+
+        buttonBackgroundLayout.setOnClickListener(onClickListener);
+        profileImageVIew.setOnClickListener(onClickListener);
+
         findViewById(R.id.checkButton).setOnClickListener(onClickListener);
-        findViewById(R.id.takePicture).setOnClickListener(onClickListener);
-        findViewById(R.id.gallary).setOnClickListener(onClickListener);
+        findViewById(R.id.picture).setOnClickListener(onClickListener);
+        findViewById(R.id.gallery).setOnClickListener(onClickListener);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        //페이스북 보면 버튼누르면 갤러리 , or 사진찍을지를 선택하니까 따라만들어봄
     }
 
     @Override
@@ -73,12 +74,10 @@ public class MemberInitActivity extends AppCompatActivity {
         switch (requestCode) {
             case 0: {
                 if (resultCode == Activity.RESULT_OK) {
-                    //  String returnValue = data.getStringExtra("some_key");
-                    profilePath = data.getStringExtra("profilePath");
-                    //Log.e("로그","profilePath");
-                    Bitmap bmp = BitmapFactory.decodeFile(profilePath);
-                    profileImageView.setImageBitmap(bmp);
-                }//카메라 엑티비티가 끝나면 여기서 멘트를 보여주면서 값을 확인할 수 있다.
+                    profilePath = data.getStringExtra(INTENT_PATH);
+                    Glide.with(this).load(profilePath).centerCrop().override(500).into(profileImageVIew);
+                    buttonBackgroundLayout.setVisibility(View.GONE);
+                }
                 break;
             }
         }
@@ -89,80 +88,44 @@ public class MemberInitActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.checkButton:
-                    profileUpdate();
+                    storageUploader();
                     break;
                 case R.id.profileImageView:
-                    Log.e("로그","merberinit 로그");
-                    CardView cardView = findViewById(R.id.buttondsCardView);
-                    if(cardView.getVisibility() == View.VISIBLE){
-                        cardView.setVisibility(View.GONE);
-                    }else{
-                        cardView.setVisibility(View.VISIBLE);
-                    }
+                    buttonBackgroundLayout.setVisibility(View.VISIBLE);
                     break;
-                case R.id.takePicture:
+                case R.id.buttonsBackgroundLayout:
+                    buttonBackgroundLayout.setVisibility(View.GONE);
+                    break;
+                case R.id.picture:
                     myStartActivity(CameraActivity.class);
                     break;
-                case R.id.gallary:
-                    //갤러리들어가기 전에 권한 체크
-                    if (ContextCompat.checkSelfPermission(MemberInitActivity.this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MemberInitActivity.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                1);
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MemberInitActivity.this,
-                                Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        } else {
-                            startToast("권한을 허용해 주세요");
-                        }
-                    }else{
-
-                        myStartActivity(GalleryActivity.class);//권한 허용 시 실행
-                    }
+                case R.id.gallery:
+                    myStartActivity(GalleryActivity.class);
                     break;
             }
         }
     };
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myStartActivity(GalleryActivity.class);//권한 허용 시 실행
-                } else {
-                    startToast("권한을 허용해 주세요");
-                }
 
-            }
-        }
-    }
+    private void storageUploader() {
+        final String name = ((EditText) findViewById(R.id.nameEditText)).getText().toString();
+        final String phoneNumber = ((EditText) findViewById(R.id.phoneNumberEditText)).getText().toString();
+        final String birthDay = ((EditText) findViewById(R.id.birthDayEditText)).getText().toString();
+        final String address = ((EditText) findViewById(R.id.addressEditText)).getText().toString();
 
-
-
-    private void profileUpdate() {
-        final String name = ((EditText) findViewById((R.id.nameEditText))).getText().toString();//스트링값이 아니기에 스트링값으로 변환 함.,입력한 텍스트를 받아옴
-        final String phoneNumber = ((EditText) findViewById((R.id.phoneNumberEditText))).getText().toString();
-        final String birtyDay = ((EditText) findViewById((R.id.nameEditText))).getText().toString();
-        final String address = ((EditText) findViewById((R.id.nameEditText))).getText().toString();
-
-
-        if(name.length()>0 && phoneNumber.length()>9 && birtyDay.length()>5  && address.length()>0) {
+        if (name.length() > 0 && phoneNumber.length() > 9 && birthDay.length() > 5 && address.length() > 0) {
+            loaderLayout.setVisibility(View.VISIBLE);
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            final StorageReference mountainImagesRef = storageRef.child("users/" + user.getUid() + "/profileImage.jpg");
 
-            user = FirebaseAuth.getInstance().getCurrentUser();//파이어 베이스에 저장된사진을 불러와서 사용하기 위함..
-            final StorageReference mountainImagesRef = storageRef.child("images/" + user.getUid() + "/profileImage.jpg");
-
-            if(profilePath==null){
-                //null인경우 데이터만올려줌
-                MemberInfoActivity memberInfo = new MemberInfoActivity(name,phoneNumber,birtyDay,address);
-                uploder(memberInfo);
-
-            }else{
+            if (profilePath == null) {
+                UserInfo userInfo = new UserInfo(name, phoneNumber, birthDay, address);
+                storeUploader(userInfo);
+            } else {
                 try {
-                    InputStream stream = new FileInputStream(new File("profilePath"));
-                    UploadTask uploadTask =mountainImagesRef.putStream(stream);
+                    InputStream stream = new FileInputStream(new File(profilePath));
+                    UploadTask uploadTask = mountainImagesRef.putStream(stream);
                     uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -176,51 +139,45 @@ public class MemberInitActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();
-                                Log.e("성공", "성공"+downloadUri);
-                                MemberInfoActivity memberInfo = new MemberInfoActivity(name,phoneNumber,birtyDay,address,downloadUri.toString());
-                                uploder(memberInfo);
-                                //데이터베이스에서 유저를 구분하려면 고유키가 필요해서 기억하기 편하고 구분하기위해서
-                                //인증해서아이디를 만들면 ui들을 만들어주는데 데이터베이스에 저장하기위함. 그키로 사용자를 찾고 할수 있음.
+
+                                UserInfo userInfo = new UserInfo(name, phoneNumber, birthDay, address, downloadUri.toString());
+                                storeUploader(userInfo);
                             } else {
-                                Log.e("로그", "실패");
-                                startToast("회원정보를  보내는데 실패 하였습니다.");
+                                showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");
                             }
                         }
                     });
-                }catch (FileNotFoundException e){
-                    Log.e("로그","에러"+e.toString());
+                } catch (FileNotFoundException e) {
+                    Log.e("로그", "에러: " + e.toString());
                 }
             }
-        }else {
-            startToast("회원정보를 입력해주세요.");
+        } else {
+            showToast(MemberInitActivity.this, "회원정보를 입력해주세요.");
         }
     }
 
-
-    private void uploder(MemberInfoActivity memberInfo){
+    private void storeUploader(UserInfo userInfo) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(user.getUid()).set(memberInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                startToast("회원정보 등록을 성공하였습니다.");
-                //등록에 성공하면화면이꺼져야하므로 finish 사용
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                startToast("회원정보 등록에 실패하였습니다.");
-
-            }
-        });
+        db.collection("users").document(user.getUid()).set(userInfo)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showToast(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.");
+                        loaderLayout.setVisibility(View.GONE);
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showToast(MemberInitActivity.this, "회원정보 등록에 실패하였습니다.");
+                        loaderLayout.setVisibility(View.GONE);
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
-    private void startToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 
-
-    private void myStartActivity(Class c){
-        Intent intent=new Intent(this, c);
-        startActivityForResult(intent,0);
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 0);
     }
-}

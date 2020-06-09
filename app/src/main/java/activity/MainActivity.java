@@ -1,77 +1,116 @@
 package activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
 
 import com.example.mure.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final  String TAG = "MainActivity";
+public class MainActivity extends BasicActivity {
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
+        setToolbarTitle(getResources().getString(R.string.app_name));
+
+        init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause (){
+        super.onPause();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1:
+                init();
+                break;
+        }
+    }
+
+    private void init(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) {
             myStartActivity(SignUpActivity.class);
-        }else{
-            myStartActivity(MemberInitActivity.class);
-          //  myStartActivity(SignUpActivity.class);//200506 확인작업 임시로 여기서 키움
-            //회원정보를 입력하라는 activity 가  나와야함.
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection("users").document(user.getUid());
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        } else {
+            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("users").document(firebaseUser.getUid());
+            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-               if(task.isSuccessful()){
-                   DocumentSnapshot document = task.getResult();
-                   if(document != null){
-                       if(document.exists()){
-                           Log.d(TAG,"Documentsnaphot data: "+document.getData());
-
-                       }else {
-                           Log.d(TAG,"no such");
-                           myStartActivity(MemberInitActivity.class);
-                       }
-                   }
-
-               }else{
-                    Log.d("get Failed", String.valueOf(task.getException()));
-               }
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null) {
+                            if (document.exists()) {
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            } else {
+                                Log.d(TAG, "No such document");
+                                myStartActivity(MemberInitActivity.class);
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
                 }
             });
 
-        }
-        findViewById(R.id.logoutButton).setOnClickListener(onClickListener);
-    }
-        View.OnClickListener onClickListener = new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                switch (v.getId()){
-                    case R.id.logoutButton:
-                        FirebaseAuth.getInstance().signOut();
-                        myStartActivity(SignUpActivity.class);
-                        break;
-                }
+            HomeFragment homeFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, homeFragment)
+                    .commit();
 
-            }
-        };
-    private void myStartActivity(Class c){
-        Intent intent=new Intent(this, c);
-        startActivity(intent);
+            BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.home:
+                            HomeFragment homeFragment = new HomeFragment();
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.container, homeFragment)
+                                    .commit();
+                            return true;
+                        case R.id.myInfo:
+                            UserInfoFragment userInfoFragment = new UserInfoFragment();
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.container, userInfoFragment)
+                                    .commit();
+                            return true;
+                        case R.id.userList:
+                            UserListFragment userListFragment = new UserListFragment();
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.container, userListFragment)
+                                    .commit();
+                            return true;
+                    }
+                    return false;
+                }
+            });
+        }
+    }
+
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
     }
 }
