@@ -1,22 +1,18 @@
 package activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mure.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
+import static using.Util.showToast;
 
 
 public class PasswordResetActivity extends BasicActivity {
@@ -55,7 +51,7 @@ public class PasswordResetActivity extends BasicActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             loaderLayout.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
-                                showToast(PasswordResetActivity.this, "이메일을 보냈습니다.");
+                                showToast (PasswordResetActivity.this, "이메일을 보냈습니다.");
                             }
                         }
                     });

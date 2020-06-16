@@ -17,6 +17,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import fragment.HomeFragment;
+import fragment.UserInfoFragment;
+import fragment.UserListFragment;
+
 public class MainActivity extends BasicActivity {
     private static final String TAG = "MainActivity";
 

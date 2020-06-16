@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mure.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,10 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import activity.LoginActivity;
-import activity.MainActivity;
-
-import static com.example.mure.Util.showToast;
+import static using.Util.showToast;
 
 
 public class SignUpActivity extends BasicActivity {

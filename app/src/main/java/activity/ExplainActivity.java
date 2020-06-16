@@ -1,3 +1,4 @@
+/*
 package activity;
 
 import android.os.Bundle;
@@ -14,3 +15,4 @@ public class ExplainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_explain_motion_scene_main);
     }
 }
+*/

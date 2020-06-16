@@ -1,9 +1,7 @@
 package activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.mure.R;
@@ -36,6 +30,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import using.UserInfo;
+
+import static using.Util.INTENT_PATH;
+import static using.Util.showToast;
+
 public class MemberInitActivity extends BasicActivity {
     private static final String TAG = "MemberInitActivity";
     private ImageView profileImageVIew;
@@ -181,3 +181,4 @@ public class MemberInitActivity extends BasicActivity {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 0);
     }
+}
